@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://audit-log-schema.example/schema/v0.1/key-transition.json",
+  "title": "KeyTransitionRecord",
+  "description": "Append-only log record written on AWS KMS key rotation. Signed by the NEW key. Historical entries remain immutable; new key signs forward only. Follows Sigstore Rekor / RFC 9162 Certificate Transparency forward-only signing pattern. v0.1-DRAFT.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entry_type",
+    "transition_id",
+    "transitioned_at",
+    "prev_key_fingerprint",
+    "new_key_fingerprint",
+    "transition_signature",
+    "prev_key_archived_at",
+    "customer_id",
+    "archive_location",
+    "signing_key_version"
+  ],
+  "properties": {
+    "entry_type": {
+      "type": "string",
+      "const": "key_transition",
+      "description": "Discriminator field. Must be exactly 'key_transition' to distinguish from AuditLogEntry records in the same append-only log."
+    },
+    "transition_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID v4. Unique identifier for this transition event."
+    },
+    "transitioned_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp when the new key became the active signing key."
+    },
+    "prev_key_fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex fingerprint of the retiring key's public key material."
+    },
+    "new_key_fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex fingerprint of the new key's public key material."
+    },
+    "transition_signature": {
+      "type": "string",
+      "description": "Base64-encoded signature over the canonical JSON of this record (excluding the transition_signature field itself), produced by the NEW key. Verifier uses new_key_fingerprint to resolve the public key from AWS KMS."
+    },
+    "prev_key_archived_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp when the retiring key's public key material was written to the archive_location. The retiring key is not destroyed — it is archived to enable verification of historical entries."
+    },
+    "customer_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Customer namespace this key transition applies to. Used as the partition prefix in the R2 archive path and the KV index."
+    },
+    "archive_location": {
+      "type": "string",
+      "pattern": "^r2://[a-z0-9\\-]+/.+$",
+      "description": "R2 URI where the retiring key's public key material is durably stored. Format: r2://<bucket>/<path>. In v0.1, the customer pulls from this dead-letter bucket. Webhook delivery is deferred to v0.2."
+    },
+    "signing_key_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "AWS KMS key version ID of the NEW key used to produce transition_signature. This is the key version that will sign all subsequent AuditLogEntry records."
+    },
+    "transition_justification": {
+      "type": "string",
+      "description": "Optional free-text reason for rotation (e.g. scheduled rotation, incident response, policy requirement). Not required — rotation can be unilateral."
+    }
+  },
+  "x-immutability-note": "Historical AuditLogEntry records are NOT re-signed on key rotation. The audit verifier walks the key-transition chain forward: for each entry, resolve signing_key_version to the active key at that timestamp via the ordered sequence of KeyTransitionRecord events in the same log."
+}

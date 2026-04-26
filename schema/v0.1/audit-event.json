@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://audit-log-schema.example/schema/v0.1/audit-event.json",
+  "title": "AuditLogEntry",
+  "description": "Core six-field record for a single LLM API call attestation. Model-agnostic, jurisdiction-agnostic. v0.1-DRAFT.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entry_id",
+    "timestamp_utc",
+    "client_timestamp_utc",
+    "model_id",
+    "caller_identity",
+    "policy_version_hash",
+    "human_review_flag",
+    "signing_key_version"
+  ],
+  "properties": {
+    "entry_id": { "type": "string", "format": "uuid", "description": "UUID v4. Client-generated. Server rejects duplicates with HTTP 409." },
+    "timestamp_utc": { "type": "string", "format": "date-time", "description": "Server ingest clock, millisecond precision, RFC 3339. Authoritative timestamp. Client-submitted value stored separately as client_timestamp_utc." },
+    "client_timestamp_utc": { "type": "string", "format": "date-time", "description": "Client-provided timestamp at call time, RFC 3339. Stored as-submitted. Server clock wins for ordering." },
+    "model_id": { "type": "string", "minLength": 1, "description": "Free-form model identifier as returned by the LLM provider. Examples: claude-sonnet-4-6, gpt-4o, gemini-1.5-pro. Not an enum; provider strings evolve faster than schema versions." },
+    "caller_identity": { "type": "string", "minLength": 1, "description": "Opaque customer-side identifier for the calling system or user. This service does not resolve or verify this value. Correctness is the submitting party's responsibility." },
+    "policy_version_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "SHA-256 hex digest of the customer's active AI usage policy document at call time. 64 lowercase hex characters. This service stores the hash as-submitted and does not retrieve or validate the referenced document." },
+    "human_review_flag": { "$ref": "https://audit-log-schema.example/schema/v0.1/human-review-flag.json", "description": "Three-state enum indicating human review status. Co-field requirements enforced by the referenced sub-schema." },
+    "signing_key_version": { "type": "string", "minLength": 1, "description": "AWS KMS key version ID used to sign this entry at ingest. Enables audit verifiers to walk the key-transition chain." }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://audit-log-schema.example/schema/v0.1/human-review-flag.json",
+  "title": "HumanReviewFlag",
+  "description": "Three-state enum for human review attestation. Co-field requirements vary by state. v0.1-DRAFT. See NOTICE.md: this service does not verify reviewer identity or review completeness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["state"],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": ["none", "attested", "sampled"],
+      "description": "none: no human review claimed. attested: a human attested to reviewing this entry; co-fields required. sampled: entry selected by an automated sampling policy; co-fields required."
+    },
+    "attested_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque identity token for the attesting party. This service does not resolve this token to a real person or verify identity. Required when state=attested."
+    },
+    "attestation_timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339. Must be >= parent entry timestamp_utc and <= ingest receipt time + 72 hours. Required when state=attested."
+    },
+    "attestation_justification": {
+      "type": "string",
+      "minLength": 200,
+      "description": "Free-text explanation of the attestation. Minimum 200 characters. Required when state=attested."
+    },
+    "attestation_scope": {
+      "type": "string",
+      "enum": ["full", "partial"],
+      "description": "full: entire entry reviewed. partial: partial review; partial_scope_note required. Required when state=attested."
+    },
+    "partial_scope_note": {
+      "type": "string",
+      "minLength": 50,
+      "description": "Required when state=attested AND attestation_scope=partial. Minimum 50 characters describing what was and was not reviewed."
+    },
+    "sample_rate": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1.0,
+      "description": "Fraction of entries selected by this sampling policy, expressed as a decimal (e.g. 0.05 = 5%). Required when state=sampled."
+    },
+    "sample_method": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Description of the sampling algorithm or policy. Minimum 20 characters. Required when state=sampled."
+    },
+    "sampled_by_system": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the automated system that selected this entry for sampling. Required when state=sampled."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "state": { "const": "attested" } },
+        "required": ["state"]
+      },
+      "then": {
+        "required": [
+          "attested_by",
+          "attestation_timestamp_utc",
+          "attestation_justification",
+          "attestation_scope"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": { "const": "attested" },
+          "attestation_scope": { "const": "partial" }
+        },
+        "required": ["state", "attestation_scope"]
+      },
+      "then": {
+        "required": ["partial_scope_note"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "sampled" } },
+        "required": ["state"]
+      },
+      "then": {
+        "required": ["sample_rate", "sample_method", "sampled_by_system"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "none" } },
+        "required": ["state"]
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            { "required": ["attested_by"] },
+            { "required": ["attestation_timestamp_utc"] },
+            { "required": ["attestation_justification"] },
+            { "required": ["attestation_scope"] },
+            { "required": ["partial_scope_note"] },
+            { "required": ["sample_rate"] },
+            { "required": ["sample_method"] },
+            { "required": ["sampled_by_system"] }
+          ]
+        }
+      }
+    }
+  ],
+  "x-notice-url": "https://audit-log-schema.example/NOTICE.md"
+}
