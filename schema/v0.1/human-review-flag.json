@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://audit-log-schema.example/schema/v0.1/human-review-flag.json",
   "title": "HumanReviewFlag",
-  "description": "Three-state enum for human review attestation. Co-field requirements vary by state. v0.1-DRAFT. See NOTICE.md: this service does not verify reviewer identity or review completeness.",
+  "description": "Three-state enum for human review attestation. Co-field requirements vary by state. v0.1-DRAFT. See CONSPICUOUS-NOTICE.md: this service does not verify reviewer identity or review completeness.",
   "type": "object",
   "additionalProperties": false,
   "required": ["state"],
@@ -111,5 +111,5 @@
       }
     }
   ],
-  "x-notice-url": "https://audit-log-schema.example/NOTICE.md"
+  "x-notice-url": "https://audit-log-schema.example/CONSPICUOUS-NOTICE.md"
 }

@@ -2,7 +2,7 @@
 
 ## Why this exists
 
-When a cybersecurity incident occurs, NYDFS Part 500 §500.17(a) requires notification within 72 hours of determining an incident occurred. Once that clock starts, a CISO presenting audit evidence cannot afford to block on a full R2 scan — "show me all LLM calls by this caller_identity between these two timestamps" needs a sub-second answer. This document specifies the Cloudflare Workers KV index pattern that makes that query fast without adding infrastructure cost.
+When a cybersecurity incident occurs, [NYDFS Part 500 §500.17(a)](https://www.dfs.ny.gov/system/files/documents/2023/12/rf23_nycrr_part_500_amend02_20231101.pdf) requires covered entities to notify the DFS superintendent "as promptly as possible but in no event later than 72 hours after determining that a Cybersecurity Incident has occurred" (per the November 1, 2023 second amendment). Once that clock starts, a CISO presenting audit evidence cannot afford to block on a full R2 scan — "show me all LLM calls by this caller_identity between these two timestamps" needs a sub-second answer. This document specifies the Cloudflare Workers KV index pattern that makes that query fast without adding infrastructure cost.
 
 This guidance applies equally to any regulatory or internal audit framework with similar time-range queryability requirements.
 

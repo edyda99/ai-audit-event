@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Jurisdiction mapping and framework alignment notes
+    url: https://github.com/edyda99/ai-audit-event/blob/main/JURISDICTIONS.md
+    about: Read the current jurisdiction alignment notes before opening an issue. If your framework is already covered, check whether a Discussions thread exists before filing a new issue.
+  - name: GitHub Discussions — schema feedback, jurisdiction mapping, compliance use cases
+    url: https://github.com/edyda99/ai-audit-event/discussions
+    about: For open-ended questions, compliance use case conversations, and jurisdiction mapping that doesn't fit the structured issue template. Discussions must be enabled in the repo Settings tab first (operator action required post-push).

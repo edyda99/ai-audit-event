@@ -12,7 +12,7 @@ A proposed wire format for six core fields that capture the minimum traceable re
 
 ## What this is not
 
-This schema does not verify the identity of the caller, the completeness of any human review, or the authenticity of any attestation submitted. It records what was submitted. Correctness is the submitting party's responsibility. See NOTICE.md for the full conspicuous notice, which must be included verbatim in any API response envelope, UI artifact-viewer, and customer contract that references this schema.
+This schema does not verify the identity of the caller, the completeness of any human review, or the authenticity of any attestation submitted. It records what was submitted. Correctness is the submitting party's responsibility. See CONSPICUOUS-NOTICE.md for the full conspicuous notice, which must be included verbatim in any API response envelope, UI artifact-viewer, and customer contract that references this schema.
 
 ## Who it is for
 
@@ -22,18 +22,36 @@ This schema does not verify the identity of the caller, the completeness of any 
 
 ## Why I'm building this
 
-<!-- FOUNDER_INTRO_PLACEHOLDER — Ed fills personally before publish -->
-<!-- Suggested prompts to address: -->
-<!-- 1. What you do day-to-day (without naming employer if sensitive) -->
-<!-- 2. The specific moment / observation that made you build this -->
-<!-- 3. Why you, specifically, are the right person to maintain it -->
-<!-- 2-3 short paragraphs total. First-person. No marketing language. -->
+I'm a senior backend developer and DevOps lead at a fintech. My day
+splits between Java Quarkus and Spring Boot services in production and the Kubernetes, Helm, and GitLab CI infrastructure those services run on — I write the code and I run the pipelines that ship it. Five years in, three AWS certifications, CKAD: the credentials matter less than the fact that I've spent those years building systems where audit isn't an afterthought. I've shipped one audit framework before this accountability and traceability were load-bearing, not checkboxes. 
+I try to automate everything I can. One time I built a flow to handle env-var changes — when a Jira ticket landed in the functional user's queue, the system would read the requirement and open the merge request itself. It ran fine for a while, until I came back from a vacation, looked at a recently-merged MR, and couldn't remember whether I'd clicked merge on it. The AI agent had the ability to merge but had been explicitly told not to — and I had no way of proving the final decision had actually been mine. The model was local; that didn't matter. There was no record, and there should have been.
+This repo isn't a product, and it doesn't try to define a regulatory
+framework. What I offer is a schema kept honest by someone who runs 
+both sides of these systems — code and infrastructure — and has 
+shipped audit before, not just talked about it. Wire format stays 
+steady; the rest is for people closer to the regulators to argue.
+
+## Optional: the sampling agent
+
+The schema alone tells you what happened. It does not tell you whether what happened was representative of what your AI systems were doing in the days and hours before an incident.
+
+There is an optional sampling agent that runs alongside the schema ingestor. It draws stratified samples from your append-only log at configurable intervals — not to verify individual records, but to surface statistical drift in call patterns: model versions, policy-tag distribution, human-review-flag ratios. When a regulator or an internal auditor asks "was this incident behavior typical or anomalous?", the sampling agent gives you a defensible answer beyond "here is the log."
+
+If you run only the schema, you have a receipt. If you run the schema plus the sampling agent, you have a receipt and a baseline.
+
+**What you give up by not running it:**
+
+- No pre-incident baseline to compare against during an investigation
+- No drift alerts if human-review-flag ratios shift over a rolling window
+- Anomaly claims in any incident report remain qualitative, not data-backed
+
+The sampling agent is documented separately and is not required to implement this schema. It is available for organizations that anticipate needing to answer the anomaly question, not just the retrieval question. A reference implementation will be linked from this README when one is available.
 
 ## Files in this repo
 
 ```
 README.md                              this file
-NOTICE.md                              conspicuous notice — verbatim, for contract / UI inclusion
+CONSPICUOUS-NOTICE.md                  conspicuous notice — verbatim, for contract / UI inclusion
 INDEXING.md                            queryability guidance (Cloudflare Workers KV index pattern)
 schema/v0.1/audit-event.json           JSON Schema for the core six-field log entry
 schema/v0.1/human-review-flag.json     three-state enum co-field rules

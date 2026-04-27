@@ -1,0 +1,100 @@
+name: Compliance Use Case
+description: Tell us how this schema maps (or fails to map) against your regulatory evidence requirements. Helps us build an honest jurisdiction alignment layer.
+title: "[Jurisdiction] <brief description of your evidence requirement>"
+labels: ["jurisdiction-mapping"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before you open this issue:** Read JURISDICTIONS.md. If your framework is already listed there and your question is covered, consider using GitHub Discussions (Jurisdiction Mapping category) for a broader conversation instead.
+
+        Honest "doesn't fit" answers are as useful as confirmations. Please be specific.
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Which regulatory framework are you working under?
+      description: Select the primary framework driving your evidence requirement. If multiple apply, select the most specific one and mention the others in the fields below.
+      options:
+        - NYDFS Part 500 (New York cybersecurity regulation)
+        - FFIEC AI/ML Booklet §VII.D (US federal banking guidance)
+        - MAS TRM Guidelines (Singapore — Technology Risk Management)
+        - FCA SYSC 8.1.8(9) (UK — outsourced activity data access)
+        - EU AI Act (Article 12 or other record-keeping provisions)
+        - APRA CPS 234 (Australia — information security)
+        - OCC AI Model Risk Guidance (US — Office of the Comptroller)
+        - DORA — ICT Risk Management (EU Digital Operational Resilience Act)
+        - Internal governance only — no specific external framework
+        - Other (please specify in the field below)
+    validations:
+      required: true
+
+  - type: input
+    id: framework_other
+    attributes:
+      label: If you selected "Other", specify the framework
+      description: Include the issuing body, the document name, and the specific section or article if known.
+      placeholder: "e.g. HKMA Supervisory Policy Manual TM-G-2 §4.3"
+    validations:
+      required: false
+
+  - type: textarea
+    id: evidence_requirement
+    attributes:
+      label: What is your specific evidence requirement?
+      description: Describe what your framework requires you to retain, produce, or demonstrate — not in terms of this schema, just in terms of what the regulation asks for. Be as specific as you can about the evidence artifact your auditor or regulator expects.
+      placeholder: "e.g. We are required to produce a timestamped log of all AI model invocations made under a specific usage policy, with evidence that the policy in force at the time is retrievable. The log must be tamper-evident and retained for 12 months."
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: coverage
+    attributes:
+      label: Does the current schema cover this requirement?
+      description: Based on your reading of audit-event.json and JURISDICTIONS.md.
+      options:
+        - "Yes — the current fields cover it as-is"
+        - "Partial — the fields are close but something is missing or ambiguous"
+        - "No — the schema doesn't address this requirement"
+    validations:
+      required: true
+
+  - type: textarea
+    id: gaps
+    attributes:
+      label: If Partial or No — what is missing or how does it fail to map?
+      description: Be specific. Name the field that's absent, the semantic that doesn't quite fit, or the structural assumption (e.g. append-only, single-provider) that doesn't hold in your context. If you have a proposed addition, describe it here — but note that the wire-format is frozen during the v0.1-DRAFT window; proposals will be held for v0.2 consideration.
+      placeholder: "e.g. We need a field for the specific regulatory regime under which the call was made, because we operate across three jurisdictions simultaneously and need to tag each entry at ingest rather than post-hoc."
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: existing_mapping
+    attributes:
+      label: Which current fields DO map to your requirements?
+      description: Even a partial mapping is useful. List the fields that work and what requirement they satisfy.
+      placeholder: "e.g. timestamp_utc + caller_identity covers the 'who and when' question. policy_version_hash covers the 'policy in force' question if we separately retain the policy documents."
+      render: markdown
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contact_consent
+    attributes:
+      label: May we follow up with you?
+      description: Optional. If you check this, leave a way to reach you (GitHub handle is fine; email if you prefer — we won't publish it).
+      options:
+        - label: Yes, you may contact me for follow-up questions about this use case.
+    validations:
+      required: false
+
+  - type: input
+    id: contact_handle
+    attributes:
+      label: Contact handle (if follow-up consent given above)
+      description: GitHub handle, email, or LinkedIn. Not required. Not published without your consent.
+      placeholder: "@yourhandle or email"
+    validations:
+      required: false
