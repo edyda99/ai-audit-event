@@ -1,0 +1,13 @@
+{
+  "_comment": "INVALID: state=attested requires attested_by, attestation_timestamp_utc, attestation_justification, attestation_scope. Run verify.py against this file to see the schema validator reject it.",
+  "entry_id": "00000000-0000-4000-8000-000000000001",
+  "timestamp_utc": "2026-04-28T03:14:18.000Z",
+  "client_timestamp_utc": "2026-04-28T03:14:17.999Z",
+  "model_id": "claude-sonnet-4-6",
+  "caller_identity": "svc-test-only",
+  "policy_version_hash": "3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b",
+  "human_review_flag": {
+    "state": "attested"
+  },
+  "signing_key_version": "alias/audit-log-prod-2026-q2/v3"
+}

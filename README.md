@@ -52,10 +52,14 @@ The sampling agent is documented separately and is not required to implement thi
 ```
 README.md                              this file
 CONSPICUOUS-NOTICE.md                  conspicuous notice — verbatim, for contract / UI inclusion
+ARCHITECTURE.md                        end-to-end mechanism + chain-field walkthrough
+JURISDICTIONS.md                       regulatory framework alignment notes (NYDFS / FFIEC / MAS / FCA)
+CONTRIBUTING.md                        what's in scope during the v0.1-DRAFT window
 INDEXING.md                            queryability guidance (Cloudflare Workers KV index pattern)
-schema/v0.1/audit-event.json           JSON Schema for the core six-field log entry
+schema/v0.1/audit-event.json           JSON Schema for the core log entry
 schema/v0.1/human-review-flag.json     three-state enum co-field rules
 schema/v0.1/key-transition.json        key-rotation event record (append-only, signed with new key)
+examples/                              valid + invalid sample entries + tiny verifier
 ```
 
 ## Schema versioning

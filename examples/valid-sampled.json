@@ -1,0 +1,15 @@
+{
+  "entry_id": "e7d3a8c1-2f9b-4d6e-a3f7-8b1c4e9d2a6f",
+  "timestamp_utc": "2026-04-28T03:14:17.418Z",
+  "client_timestamp_utc": "2026-04-28T03:14:17.395Z",
+  "model_id": "claude-sonnet-4-6",
+  "caller_identity": "svc-fraud-screening-prod-4d9b",
+  "policy_version_hash": "3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b",
+  "human_review_flag": {
+    "state": "sampled",
+    "sample_rate": 0.05,
+    "sample_method": "Stratified random sampling by caller_identity at 5% of total daily call volume; refreshed per UTC day boundary.",
+    "sampled_by_system": "audit-sampler-v0.1.2"
+  },
+  "signing_key_version": "alias/audit-log-prod-2026-q2/v3"
+}

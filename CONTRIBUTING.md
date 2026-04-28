@@ -28,6 +28,16 @@ Pull requests modifying the core schema files in `schema/v0.1/` are also out of 
 
 **INDEXING.md feedback.** The Cloudflare Workers KV index pattern described in INDEXING.md is a reference design, not a normative requirement. If you have implemented a different queryability layer (DynamoDB GSI, Postgres partial index, etc.) against this schema and want to document it, open a PR against INDEXING.md or open a Discussion. Additive documentation to INDEXING.md is in scope.
 
+## Where to post
+
+The repo has three Discussions categories. Pick the one that matches what you're trying to do:
+
+- **Compliance Use Cases** (Q&A format) — for "does this schema satisfy [my regulatory requirement]?" The Q&A format means the best answer gets marked accepted and becomes citable. Use this when you want a definite answer you can reference later.
+- **Jurisdiction Mapping** (open discussion) — for iterative, multi-perspective work mapping the schema against a regulatory framework (e.g., MAS TRM, FCA SYSC, EU AI Act Article 12). Open discussion because mapping is contested and evolves; threads here can stay open and gather perspectives from people in different jurisdictions.
+- **Schema Feedback** (Q&A format) — for specific technical questions about field semantics, format constraints, or implementation behavior. Q&A so the authoritative answer can be marked.
+
+For structured submissions where you have already done the mapping work and want to file it as a record, the **Compliance Use Case** issue template (the "New Issue" button) is the right channel — it captures jurisdiction, evidence requirement, schema coverage, and any gaps in a structured form. For exploratory discussion before filing, use Discussions.
+
 ## Code of conduct
 
 Be direct and honest, including about gaps and failures. Overstating what this schema provides in a compliance context harms the people who depend on audit evidence being accurate.
